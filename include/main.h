@@ -4,6 +4,7 @@
 #define PROS_USE_LITERALS
 
 #include "api.h"
+#include "PID.hpp"
 
 using namespace pros;
 

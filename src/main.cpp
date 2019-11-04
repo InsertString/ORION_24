@@ -24,16 +24,28 @@ void initialize() {
 	lcd::initialize();
 }
 
+
+
+
 void disabled() {}
+
+
+
 
 void competition_initialize() {}
 
+
+
+
 void autonomous() {}
+
+
+
 
 void opcontrol() {
 
 	while (true) {
 
-		pros::delay(20);
+		delay(20);
 	}
 }
