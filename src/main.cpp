@@ -19,6 +19,20 @@ Motor elevator_L(ELEVATOR_L);
 Motor elevator_R(ELEVATOR_R);
 
 
+// sensors
+
+// these limits are placed at the top of each elevator
+// they help keep encoder values consistant throughout the match
+
+ADIDigitalIn elevator_limit_L(1);
+ADIDigitalIn elevator_limit_R(2);
+
+// lne sensors detect when cubes are in different parts
+// of the intake for the autostack algorithum
+
+ADILineSensor cube_detector_back(3);
+ADILineSensor cube_detector_front(4);
+
 
 void initialize() {
 	lcd::initialize();
