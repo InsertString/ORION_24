@@ -5,6 +5,7 @@
 
 #include "api.h"
 #include "PID.hpp"
+#include "cube_system.hpp"
 
 using namespace pros;
 
@@ -57,5 +58,11 @@ extern Motor intake_R;
 
 extern Motor elevator_L;
 extern Motor elevator_R;
+
+extern ADIDigitalIn elevator_limit_L;
+extern ADIDigitalIn elevator_limit_R;
+
+extern ADILineSensor cube_detector_back;
+extern ADILineSensor cube_detector_front;
 
 #endif  // _PROS_MAIN_H_
