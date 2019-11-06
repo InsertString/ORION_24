@@ -50,18 +50,18 @@ bool Cube_System::elevators_to_position(int target) {
     case TOP :
     // check whether the elevator is at the top if not, move up
     if (!elevator_at_limit(LEFT))
-      elevator_L = 127;
+      elevator_L.move_absolute(0, 200);
     else {
       // move at holding power and reset the encoders
-      elevator_L = 2;
+      elevator_L.move_absolute(0, 200);
       elevator_L.tare_position();
     }
     // check whether the elevator is at the top if not, move up
     if (!elevator_at_limit(RIGHT))
-      elevator_R = 127;
+      elevator_R.move_absolute(0, 200);
     else {
       // move at holding power and reset the encoder
-      elevator_R = 2;
+      elevator_R.move_absolute(0, 200);
       elevator_R.tare_position();
     }
     break;

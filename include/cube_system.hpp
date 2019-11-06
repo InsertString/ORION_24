@@ -29,6 +29,7 @@ public:
   // system functions
   int stacking_steps;
   int stack_cubes();
+  void driveControlCode();
 };
 
 
