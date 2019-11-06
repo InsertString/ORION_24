@@ -34,11 +34,6 @@ ADILineSensor cube_detector_back(3);
 ADILineSensor cube_detector_front(4);
 
 
-PID drive_close_PID;
-PID drive_far_PID;
-PID turn_PID;
-PID elevator_PID;
-
 
 void initialize() {
 	lcd::initialize();
