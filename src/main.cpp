@@ -35,6 +35,12 @@ ADILineSensor cube_detector_front(4);
 
 
 
+// classes
+
+Cube_System cube_system;
+
+
+
 void initialize() {
 	lcd::initialize();
 }
@@ -60,7 +66,7 @@ void autonomous() {}
 void opcontrol() {
 
 	while (true) {
-
+		cube_system.driveControlCode();
 		delay(20);
 	}
 }
