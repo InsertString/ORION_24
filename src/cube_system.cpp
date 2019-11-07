@@ -35,13 +35,8 @@ void Cube_System::driveControlCode() {
     elevators_to_position(TOP);
     break;
   }
-<<<<<<< HEAD
-
-  if (master.get_digital(DIGITAL_R1))
-=======
   // run the intake only when not autostaking so that it doesnt interfere
-  if (master.get_digital(DIGITAL_R1) && stacking_steps == 0) {
->>>>>>> 862fb78379388a33558cca41f1e324a97f75b4c3
+  if (master.get_digital(DIGITAL_R1) && stacking_steps == 0)
     set_intake_power(127);
   else if (master.get_digital(DIGITAL_R2))
     set_intake_power(-127);
