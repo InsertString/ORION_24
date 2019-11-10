@@ -17,7 +17,7 @@ double Cube_System::front_light_value() {
 
 
 
-double Cube_System::back_light_value() {
+int Cube_System::back_light_value() {
   return cube_detector_back.get_value();
 }
 
@@ -28,9 +28,9 @@ double Cube_System::back_light_value() {
 int Cube_System::cubes_in_intake() {
   int count = 0;
   // if a cube is in front of a light sensor, then increase the cube count
-  if (back_light_value() > LIGHT_THRESHOLD)
+  if (back_light_value() > 0)
     count++;
-  if (front_light_value() > LIGHT_THRESHOLD)
+  if (front_light_value() < LIGHT_THRESHOLD)
     count++;
   return count;
 }

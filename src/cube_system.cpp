@@ -36,12 +36,39 @@ void Cube_System::driveControlCode() {
     break;
   }
   // run the intake only when not autostaking so that it doesnt interfere
-  if (master.get_digital(DIGITAL_R1) && stacking_steps == 0)
-    set_intake_power(127);
-  else if (master.get_digital(DIGITAL_R2))
-    set_intake_power(-127);
-  else
-    set_intake_power(0);
+  if (master.get_digital(DIGITAL_R1) && stacking_steps == 0) {
+    if (cubes_in_intake() == 2) {
+      intake_L.move_velocity(-25);
+      intake_R.move_velocity(25);
+      if (((int)intake_L.get_position() % 10)) {
+        intake_L.tare_position();
+        intake_R.tare_position();
+      }
+    }
+    else {
+      intake_L.move_velocity(-100);
+      intake_R.move_velocity(100);
+      if (((int)intake_L.get_position() % 10)) {
+        intake_L.tare_position();
+        intake_R.tare_position();
+      }
+    }
+
+  }
+  else if (master.get_digital(DIGITAL_R2)) {
+    intake_L.move_velocity(50);
+    intake_R.move_velocity(-50);
+    if (((int)intake_L.get_position() % 10)) {
+      intake_L.tare_position();
+      intake_R.tare_position();
+    }
+  }
+  else {
+    intake_L.move_absolute(0, 50);
+    intake_R.move_absolute(0, 50);
+  }
+
+
 
 
 }

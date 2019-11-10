@@ -30,9 +30,9 @@ ADIDigitalIn elevator_limit_R(2);
 // lne sensors detect when cubes are in different parts
 // of the intake for the autostack algorithum
 
-ADILineSensor cube_detector_back(3);
-ADILineSensor cube_detector_front(4);
-
+ADILineSensor cube_detector_front(3);
+//ADILineSensor cube_detector_front(4);
+ADIDigitalIn cube_detector_back(4);
 
 
 // classes
@@ -43,6 +43,8 @@ Cube_System cube_system;
 
 void initialize() {
 	lcd::initialize();
+	intake_L.tare_position();
+	intake_R.tare_position();
 }
 
 
@@ -66,6 +68,7 @@ void autonomous() {}
 void opcontrol() {
 
 	while (true) {
+		lcd::print(0, "cube light val %f", cube_system.front_light_value());
 		cube_system.driveControlCode();
 		delay(20);
 	}

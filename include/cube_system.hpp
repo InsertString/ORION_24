@@ -14,7 +14,7 @@ public:
   #define TOP 0
   #define MID 100
   #define BOT 200
-  #define LIGHT_THRESHOLD 500
+  #define LIGHT_THRESHOLD 2850
 
   // elevator functions
   double elevator_position(int elevator);
@@ -25,7 +25,7 @@ public:
   void set_intake_power(int power);
   int cubes_in_intake();
   double front_light_value();
-  double back_light_value();
+  int back_light_value();
   // system functions
   int stacking_steps;
   int stack_cubes();

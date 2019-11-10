@@ -62,7 +62,8 @@ extern Motor elevator_R;
 extern ADIDigitalIn elevator_limit_L;
 extern ADIDigitalIn elevator_limit_R;
 
-extern ADILineSensor cube_detector_back;
 extern ADILineSensor cube_detector_front;
+//extern ADILineSensor cube_detector_front;
+extern ADIDigitalIn cube_detector_back;
 
 #endif  // _PROS_MAIN_H_
