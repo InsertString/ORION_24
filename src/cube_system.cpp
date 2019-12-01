@@ -46,8 +46,8 @@ void Cube_System::driveControlCode() {
       }
     }
     else {
-      intake_L.move_velocity(-100);
-      intake_R.move_velocity(100);
+      intake_L.move_velocity(-200);
+      intake_R.move_velocity(200);
       if (((int)intake_L.get_position() % 10)) {
         intake_L.tare_position();
         intake_R.tare_position();

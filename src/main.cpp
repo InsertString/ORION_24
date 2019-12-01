@@ -66,10 +66,39 @@ void autonomous() {}
 
 
 void opcontrol() {
-
+	int left = 0;
+	int right = 0;
 	while (true) {
 		lcd::print(0, "cube light val %f", cube_system.front_light_value());
+
 		cube_system.driveControlCode();
+
+		left = master.get_analog(ANALOG_LEFT_Y);
+		right = -master.get_analog(ANALOG_RIGHT_Y);
+
+
+		drive_left_B = left;
+		drive_left_FB = left;
+		drive_left_FT = -left;
+
+		drive_right_B = right;
+		drive_right_FB = right;
+		drive_right_FT = -right;
+
+
+		if (master.get_digital(DIGITAL_L1)) {
+			elevator_L = 127;
+			elevator_R = 127;
+		}
+		else if (master.get_digital(DIGITAL_L2)) {
+			elevator_L = -127;
+			elevator_R = -127;
+		}
+		else {
+			elevator_L = 0;
+			elevator_R = 0;
+		}
+
 		delay(20);
 	}
 }
