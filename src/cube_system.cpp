@@ -64,8 +64,8 @@ void Cube_System::driveControlCode() {
     }
   }
   else {
-    intake_L.move_absolute(0, 50);
-    intake_R.move_absolute(0, 50);
+    intake_L = 0;
+    intake_R = 0;//.move_absolute(0, 50);
   }
 
 
