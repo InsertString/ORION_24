@@ -52,7 +52,13 @@ void autonomous() {}
 
 void opcontrol() {
 	int moving_state = DRIVE;
-	int tray_moved = 0;
+	int auto_drive_back = 0;
+
+	drive_left_F.tare_position();
+	drive_left_B.tare_position();
+	drive_right_B.tare_position();
+	drive_right_F.tare_position();
+
 	while (true) {
 
 		if (limit.get_value() == 1 && moving_state == DRIVE) {
@@ -61,8 +67,6 @@ void opcontrol() {
 			drive_right_B.tare_position();
 			drive_right_F.tare_position();
 		}
-
-
 
 		if (master.get_digital(DIGITAL_R1)) {
 			intake_left = 127;
@@ -77,17 +81,6 @@ void opcontrol() {
 			intake_right = 0;
 		}
 
-
-
-		if (abs(master.get_analog(ANALOG_LEFT_Y)) > 20 || abs(master.get_analog(ANALOG_RIGHT_Y)) > 20) {
-			moving_state = DRIVE;
-		}
-		else {
-			moving_state = TRAY;
-		}
-
-
-
 		if (moving_state == DRIVE) {
 			drive_left_B = -master.get_analog(ANALOG_LEFT_Y);
 			drive_left_F = master.get_analog(ANALOG_LEFT_Y);
@@ -95,40 +88,49 @@ void opcontrol() {
 			drive_right_B = master.get_analog(ANALOG_RIGHT_Y);
 			drive_right_F = -master.get_analog(ANALOG_RIGHT_Y);
 		}
-		else if (moving_state == TRAY) {
-			if (master.get_digital(DIGITAL_L1)) {
-				drive_left_B.move_absolute(500, 30);
-				drive_left_F.move_absolute(500, 30);
 
-				drive_right_B.move_absolute(-500, 30);
-				drive_right_F.move_absolute(-500, 30);
-			}
-			else if (master.get_digital(DIGITAL_UP)) {
 
-				drive_left_B = 30;
-				drive_left_F = 30;
+		if (master.get_digital(DIGITAL_L1)) {
+			drive_left_B.move_absolute(550, 30);
+			drive_left_F.move_absolute(550, 30);
 
-				drive_right_B = -30;
-				drive_right_F = -30;
-			}
-			else if (master.get_digital(DIGITAL_L2)) {
-				drive_left_B = -50;
-				drive_left_F = -50;
-
-				drive_right_B = 50;
-				drive_right_F = 50;
-				tray_moved = 0;
-			}
-			else {
-				drive_left_B = 0;
-				drive_left_F = 0;
-
-				drive_right_B = 0;
-				drive_right_F = 0;
-			}
+			drive_right_B.move_absolute(-550, 30);
+			drive_right_F.move_absolute(-550, 30);
 		}
+		else if (master.get_digital(DIGITAL_UP)) {
+			drive_left_B = 30;
+			drive_left_F = 30;
 
+			drive_right_B = -30;
+			drive_right_F = -30;
+		}
+		else if (master.get_digital(DIGITAL_L2)) {
+			drive_left_B = -50;
+			drive_left_F = -50;
 
-		delay(20);
+			drive_right_B = 50;
+			drive_right_F = 50;
+		}
+		else if (master.get_digital(DIGITAL_DOWN)) {
+			drive_left_B = 30;
+			drive_left_F = -30;
+
+			drive_right_B = -30;
+			drive_right_F = 30;
+
+			intake_left = -30;
+			intake_right = 30;
+		}
+		else {
+			moving_state = DRIVE;
+			drive_left_B = 0;
+			drive_left_F = 0;
+
+			drive_right_B = 0;
+			drive_right_F = 0;
+		}
 	}
+
+
+	delay(20);
 }
