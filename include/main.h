@@ -5,6 +5,7 @@
 
 #include "api.h"
 #include "PID.hpp"
+#include "transmission.hpp"
 
 using namespace pros;
 
@@ -37,5 +38,10 @@ void opcontrol(void);
 
 #ifdef __cplusplus
 #endif
+
+extern Motor drive_left_B;
+extern Motor drive_right_B;
+extern Motor drive_left_F;
+extern Motor drive_right_F;
 
 #endif  // _PROS_MAIN_H_
