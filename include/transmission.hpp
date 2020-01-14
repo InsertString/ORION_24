@@ -13,5 +13,7 @@ void reset_trans_motors();
 
 void stop_trans();
 
+bool tray_limit();
+
 
 #endif

@@ -16,7 +16,7 @@ Motor drive_right_B(DRIVE_RIGHT_B);
 Motor intake_left(INTAKE_LEFT);
 Motor intake_right(INTAKE_RIGHT);
 
-ADIDigitalIn limit(1);
+ADIDigitalIn t_limit(1);
 
 
 void initialize() {
@@ -51,14 +51,13 @@ void autonomous() {}
 #define DRIVE 0
 
 void opcontrol() {
-	int moving_state = DRIVE;
-	int auto_drive_back = 0;
 
+	int trans_state = DRIVE;
 	reset_trans_motors();
 
 	while (true) {
 
-		if (limit.get_value() == 1 && moving_state == DRIVE) {
+		if (tray_limit() && trans_state == DRIVE) {
 			reset_trans_motors();
 		}
 
@@ -75,7 +74,7 @@ void opcontrol() {
 			intake_right = 0;
 		}
 
-		if (moving_state == DRIVE) {
+		if (trans_state == DRIVE) {
 			move_drive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_Y));
 		}
 
@@ -95,7 +94,7 @@ void opcontrol() {
 			intake_right = 30;
 		}
 		else {
-			moving_state = DRIVE;
+			trans_state = DRIVE;
 			stop_trans();
 		}
 	}

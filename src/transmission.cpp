@@ -2,6 +2,12 @@
 #include "transmission.hpp"
 
 
+bool tray_limit() {
+  bool i = (t_limit.get_value() == 1) ? true : false;
+  return i;
+}
+
+
 void reset_trans_motors() {
   drive_left_F.tare_position();
 	drive_left_B.tare_position();

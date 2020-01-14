@@ -44,4 +44,6 @@ extern Motor drive_right_B;
 extern Motor drive_left_F;
 extern Motor drive_right_F;
 
+extern ADIDigitalIn t_limit;
+
 #endif  // _PROS_MAIN_H_
