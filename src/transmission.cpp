@@ -8,6 +8,16 @@ bool tray_limit() {
 }
 
 
+bool driving() {
+  if (abs(master.get_analog(ANALOG_LEFT_Y)) > 5 || abs(master.get_analog(ANALOG_RIGHT_Y)) > 5) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+
 void reset_trans_motors() {
   drive_left_F.tare_position();
 	drive_left_B.tare_position();

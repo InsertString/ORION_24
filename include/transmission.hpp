@@ -15,5 +15,7 @@ void stop_trans();
 
 bool tray_limit();
 
+bool driving();
+
 
 #endif

@@ -16,7 +16,9 @@ Motor drive_right_B(DRIVE_RIGHT_B);
 Motor intake_left(INTAKE_LEFT);
 Motor intake_right(INTAKE_RIGHT);
 
-ADIDigitalIn t_limit(1);
+Motor arm(ARM);
+
+ADIDigitalIn t_limit(TRAY_LIMIT);
 
 
 void initialize() {
@@ -29,6 +31,8 @@ void initialize() {
 	drive_right_B.set_brake_mode(MOTOR_BRAKE_BRAKE);
 	drive_right_F.set_brake_mode(MOTOR_BRAKE_BRAKE);
 
+	//intake_left.set_current_limit(2000);
+	//intake_right.set_current_limit(2000);
 }
 
 
@@ -47,58 +51,85 @@ void competition_initialize() {}
 void autonomous() {}
 
 
-#define TRAY 1
-#define DRIVE 0
-
 void opcontrol() {
 
 	int trans_state = DRIVE;
 	reset_trans_motors();
+	arm.tare_position();
 
+	int arm_state = 0;
 	while (true) {
+
+		// arm
+		if (master.get_digital(DIGITAL_X)) {
+			arm = 127;
+			arm_state = 1;
+		}
+		else if (master.get_digital(DIGITAL_B)) {
+			arm = -127;
+			arm_state = 0;
+		}
+		else {
+			if (arm_state == 1) {
+				arm = 10;
+			}
+			else {
+				arm = 0;
+			}
+		}
+
+
+		// rollers
+		if (master.get_digital(DIGITAL_R1)) {
+			in_take(127);
+		}
+		else if (master.get_digital(DIGITAL_R2)) {
+			out_take(70);
+		}
+		else if (master.get_digital(DIGITAL_DOWN)) {}
+		else {
+			if (driving()) {
+				in_take(30);
+			}
+			else {
+				stop_intake();
+			}
+		}
+
+
+		// drive
+		if (trans_state == DRIVE) {
+			move_drive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_Y));
+		}
 
 		if (tray_limit() && trans_state == DRIVE) {
 			reset_trans_motors();
 		}
 
-		if (master.get_digital(DIGITAL_R1)) {
-			intake_left = 127;
-			intake_right = -127;
-		}
-		else if (master.get_digital(DIGITAL_R2)) {
-			intake_left = -70;
-			intake_right = 70;
-		}
-		else {
-			intake_left = 0;
-			intake_right = 0;
-		}
 
-		if (trans_state == DRIVE) {
-			move_drive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_Y));
-		}
-
-
+		// tray
 		if (master.get_digital(DIGITAL_L1)) {
-			move_tray_PID(550, 30);
+			trans_state = TRAY;
+			move_tray_PID(1000, 35);
 		}
 		else if (master.get_digital(DIGITAL_UP)) {
-			move_tray(30);
+			trans_state = TRAY;
+			move_tray(20);
 		}
-		else if (master.get_digital(DIGITAL_L2)) {
-			move_tray(-50);
+		else if (master.get_digital(DIGITAL_L2) && tray_limit() == false) {
+			trans_state = TRAY;
+			move_tray(-100);
 		}
 		else if (master.get_digital(DIGITAL_DOWN)) {
-			move_drive(-30, -30);
-			intake_left = -30;
-			intake_right = 30;
+			trans_state = TRAY;
+			move_drive(-20, -30);
+			out_take(20);
 		}
 		else {
 			trans_state = DRIVE;
-			stop_trans();
 		}
+
+
+		delay(20);
 	}
-
-
-	delay(20);
 }
