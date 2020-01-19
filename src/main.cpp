@@ -58,6 +58,10 @@ void opcontrol() {
 	arm.tare_position();
 
 	int arm_state = 0;
+	int scoring_step = 0;
+	int scoring_timer = 0;
+
+
 	while (true) {
 
 		// arm
@@ -86,7 +90,7 @@ void opcontrol() {
 		else if (master.get_digital(DIGITAL_R2)) {
 			out_take(70);
 		}
-		else if (master.get_digital(DIGITAL_DOWN)) {}
+		else if (master.get_digital(DIGITAL_DOWN) || (master.get_digital(DIGITAL_L1))) {}
 		else {
 			if (driving()) {
 				in_take(30);
@@ -110,7 +114,7 @@ void opcontrol() {
 		// tray
 		if (master.get_digital(DIGITAL_L1)) {
 			trans_state = TRAY;
-			move_tray_PID(1000, 35);
+			score_cubes(scoring_step, scoring_timer);
 		}
 		else if (master.get_digital(DIGITAL_UP)) {
 			trans_state = TRAY;
@@ -127,6 +131,8 @@ void opcontrol() {
 		}
 		else {
 			trans_state = DRIVE;
+			scoring_step = 0;
+			scoring_timer = 0;
 		}
 
 

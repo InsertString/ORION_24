@@ -28,7 +28,9 @@ using namespace pros;
 // values
 #define TRAY 1
 #define DRIVE 0
-
+#define TRAY_MAX 1000
+#define TRAY_SLOW 950
+#define TRAY_MED 500
 
 #ifdef __cplusplus
 extern "C" {
