@@ -65,4 +65,6 @@ extern ADIDigitalIn elevator_limit_R;
 extern ADILineSensor cube_detector_back;
 extern ADILineSensor cube_detector_front;
 
+extern Cube_System cube_system;
+
 #endif  // _PROS_MAIN_H_
