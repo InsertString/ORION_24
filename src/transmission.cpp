@@ -43,18 +43,22 @@ void stop_trans() {
 void move_drive(int power_L, int power_R) {
   drive_left_B = -power_L;
   drive_left_F = power_L;
+  drive_abs_left = -power_L;
 
   drive_right_B = power_R;
   drive_right_F = -power_R;
+  drive_abs_right = power_R;
 }
 
 
 void move_drive_PID(double target, double speed) {
   drive_left_B.move_absolute(-target, speed);
   drive_left_F.move_absolute(target, speed);
+  drive_abs_left.move_absolute(-target, speed);
 
   drive_right_B.move_absolute(target, speed);
   drive_right_F.move_absolute(-target, speed);
+  drive_abs_right.move_absolute(target, speed);
 }
 
 
@@ -68,87 +72,62 @@ void move_tray(int power) {
 
 
 void move_tray_PID(double target, double speed) {
-  drive_left_B.move_absolute(target, speed);
-  drive_left_F.move_absolute(target, speed);
+  // 926 perfect value needed
 
-  drive_right_B.move_absolute(-target, speed);
-  drive_right_F.move_absolute(-target, speed);
+  tray_pid.set_PID_constants(0.1, 0, 0);
+  tray_pid.set_PID_variables(target, speed, -speed, 100);
+
+  move_tray(tray_pid.output(tray_position()));
 }
 
 
-void score_cubes(int &step, int &timer_1) {
+void score_cubes(double target, double speed, int &step, int &timer_1) {
   int delta_time;
-
-  switch(step) {
-    // ensure that the tray starts from the resting position
+  delta_time = millis() - timer_1;
+  switch (step) {
     case 0 :
-    if (tray_limit() == true) {
-      move_tray(0);
-      reset_trans_motors();
-      step++;
+    tray_pid.set_PID_constants(0.1, 0, 0);
+    tray_pid.set_PID_variables(target, speed, -speed, 100);
+    move_tray(tray_pid.output(tray_position()));
+
+    if (tray_position() <= 500 && (millis() % 50) == 0) {
+      in_take(20);
+      timer_1 = millis();
     }
-    else
-      move_tray(-10);
-    break;
-
-    // move the tray at max power to the medium speed position
-    case 1 :
-    if (tray_position() < TRAY_MED) {
-      move_tray(127);
-      in_take(10);
-    }
-    else
-      step++;
-    break;
-
-    // switch to slow PID between medium and slow position
-    case 2 :
-    if (tray_position() < TRAY_SLOW)
-      move_tray_PID(TRAY_SLOW + 20, 20);
-    else
-      step++;
-    break;
-
-    // move tray at etremely slow speed to keep stack straight
-    case 3 :
-    if (tray_position() < TRAY_MAX)
-      move_tray(10);
-    else
-      step++;
-    break;
-
-    // stop at max tray position
-    case 4 :
-    stop_trans();
-    timer_1 = millis();
-    step++;
-    break;
-
-    // wait for half a second
-    case 5 :
-    delta_time = millis() - timer_1;
-    if (delta_time > 500)
-      step++;
-    break;
-
-    // move tray back a bit so that it doesnt interfier with the intake
-    case 6:
-    if (tray_position() > 800)
-      move_tray(-20);
-    else {
-      stop_trans();
-      step++;
-    }
-    break;
-
-    // out-take and drive back at the same time for 750ms
-    case 7 :
-    delta_time = millis() - timer_1;
-    out_take(10);
-    move_drive(-10, -10);
-    if (delta_time > 750) {
-      stop_trans();
+    else if (tray_position() <= 500 && delta_time > 200) {
       stop_intake();
+    }
+    else {
+      stop_intake();
+    }
+
+    if (tray_position() >= 920) {
+      step++;
+      stop_trans();
+      timer_1 = millis();
+    }
+    break;
+    case 1 :
+    if (delta_time > 750) {
+      step++;
+      timer_1 = millis();
+    }
+    break;
+    case 2 :
+    tray_pid.set_PID_constants(0.1, 0, 0);
+    tray_pid.set_PID_variables(TRAY_MED, speed, -speed, 100);
+    move_tray(tray_pid.output(tray_position()));
+
+    if (tray_position() <= 550) {
+      stop_trans();
+      step++;
+      timer_1 = millis();
+    }
+    break;
+    case 3 :
+    out_take(70);
+    if (delta_time > 200) {
+      move_drive(-20, -20);
     }
     break;
   }

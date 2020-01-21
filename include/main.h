@@ -17,8 +17,10 @@ using namespace pros;
 #define DRIVE_LEFT_B 9
 #define DRIVE_RIGHT_F 7
 #define DRIVE_RIGHT_B 6
-#define INTAKE_LEFT 12
-#define INTAKE_RIGHT 20
+#define DRIVE_ABS_L 15
+#define DRIVE_ABS_R 19
+#define INTAKE_LEFT 13
+#define INTAKE_RIGHT 17
 #define ARM 10
 
 // sensor ports
@@ -28,9 +30,10 @@ using namespace pros;
 // values
 #define TRAY 1
 #define DRIVE 0
-#define TRAY_MAX 1000
-#define TRAY_SLOW 950
-#define TRAY_MED 500
+#define TRAY_MAX 950
+#define TRAY_SLOW 700
+#define TRAY_MID 500
+#define TRAY_MED 300
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,10 +56,15 @@ extern Motor drive_left_B;
 extern Motor drive_right_B;
 extern Motor drive_left_F;
 extern Motor drive_right_F;
+extern Motor drive_abs_left;
+extern Motor drive_abs_right;
 
 extern Motor intake_left;
 extern Motor intake_right;
 
 extern ADIDigitalIn t_limit;
+
+extern PID arm_pid;
+extern PID tray_pid;
 
 #endif  // _PROS_MAIN_H_

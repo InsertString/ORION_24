@@ -17,7 +17,7 @@ bool tray_limit();
 
 bool driving();
 
-void score_cubes(int &step, int &timer_1);
+void score_cubes(double target, double speed, int &step, int &timer_1);
 
 double tray_position();
 
