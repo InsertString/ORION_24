@@ -26,7 +26,8 @@ ADIDigitalIn a_limit(A_LIMIT);
 
 ADILineSensor c_detect(CUBE_DETECTER);
 
-
+ADIEncoder left_enc(L_ENCODER_TOP,L_ENCODER_BOT,false);
+ADIEncoder right_enc(R_ENCODER_TOP,R_ENCODER_BOT,false);
 
 //PID objects
 PID arm_pid;
@@ -72,19 +73,33 @@ void opcontrol() {
 	int arm_state = 0;
 	int scoring_step = 0;
 	int scoring_timer = 0;
+
 	int arm_timer = 0;
 	int arm_delta_time = 0;
+	int arm_cube_wait = 250;
 
+	int tray_state = 0;
+
+	std::string roller_status = "EMPTY";
 
 	while (true) {
 
 		arm_delta_time = millis() - arm_timer;
+
+		if (loaded() == true) {
+			roller_status = "LOADED";
+		}
+		else {
+			roller_status = "EMPTY";
+		}
 
 		lcd::print(0, "TrayPos:[%4.0f],ArmPos:[%4.0f]", tray_position(), arm.get_position());
 		lcd::print(1, "TEMPS:");
 		lcd::print(2, "DriveL[F][M][B]:[%2.0f][%2.0f][%2.0f]", drive_left_F.get_temperature(), drive_left_B.get_temperature(), drive_abs_left.get_temperature());
 		lcd::print(3, "DriveR[F][M][B]:[%2.0f][%2.0f][%2.0f]", drive_right_F.get_temperature(), drive_right_B.get_temperature(), drive_abs_right.get_temperature());
 		lcd::print(4, "Arm:[%2.0f],Roll_L:[%2.0f],Roll_R:[%2.0f]", arm.get_temperature(), intake_left.get_temperature(), intake_right.get_temperature());
+		lcd::print(5, "Roller:[%s], raw:[%4.0f]", roller_status, c_detect.get_value());
+
 
 ///*
 		// arm ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -107,7 +122,7 @@ void opcontrol() {
 		}
 		else {
 			if (arm_state == 1) {
-				if (loaded() == true || arm_delta_time > 500) {
+				if (loaded() == true || arm_delta_time > arm_cube_wait) {
 					arm_pid.set_PID_constants(0.6, 0, 0);
 					arm_pid.set_PID_variables(1400, 127, -127, 100);
 					arm = arm_pid.output(arm.get_position());
@@ -123,7 +138,7 @@ void opcontrol() {
 				}
 			}
 			else if (arm_state == 2) {
-				if (loaded() == true || arm_delta_time > 500) {
+				if (loaded() == true || arm_delta_time > arm_cube_wait) {
 					arm_pid.set_PID_constants(0.6, 0, 0);
 					arm_pid.set_PID_variables(1960, 127, -127, 100);
 					arm = arm_pid.output(arm.get_position());
@@ -140,7 +155,7 @@ void opcontrol() {
 			}
 			else if (arm_state == 0) {
 				if (a_limit.get_value() == 0) {
-					arm = -80;
+					arm = -100;
 				}
 				else {
 					arm = 0;
@@ -181,18 +196,19 @@ void opcontrol() {
 
 
 		// tray ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-		if (master.get_digital(DIGITAL_UP)) {
+		if (master.get_digital_new_press(DIGITAL_UP)) {
+			tray_state = 1;
 			trans_state = TRAY;
-			score_cubes(960, 127, scoring_step, scoring_timer);
+			//score_cubes(960, 127, scoring_step, scoring_timer);
 		}
 		else if (master.get_digital(DIGITAL_LEFT)) {
 			trans_state = TRAY;
 			move_tray(30);
 		}
-		else if (master.get_digital(DIGITAL_DOWN) && tray_limit() == false) {
+		else if (master.get_digital_new_press(DIGITAL_DOWN) && tray_limit() == false) {
+			tray_state = 0;
 			trans_state = TRAY;
-			//move_tray_PID(0, 127);
-			move_tray(-60);
+			//move_tray(-60);
 		}
 		else if (master.get_digital(DIGITAL_RIGHT)) {
 			trans_state = TRAY;
@@ -200,9 +216,20 @@ void opcontrol() {
 			out_take(70);
 		}
 		else {
-			trans_state = DRIVE;
-			scoring_step = 0;
-			scoring_timer = 0;
+			if (tray_state == 0 && tray_limit() == true) {
+				trans_state = DRIVE;
+				scoring_step = 0;
+				scoring_timer = 0;
+			}
+			else if (tray_state == 1) {
+				trans_state = TRAY;
+				score_cubes(960, 127, scoring_step, scoring_timer);
+			}
+			else if (tray_state == 0 && tray_limit() == false) {
+				trans_state = TRAY;
+				move_tray(-60);
+				scoring_step = 0;
+			}
 		}
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //*/

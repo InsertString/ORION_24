@@ -7,6 +7,7 @@
 #include "PID.hpp"
 #include "transmission.hpp"
 #include "intake.hpp"
+#include "sys/string.h"
 
 using namespace pros;
 
@@ -26,7 +27,12 @@ using namespace pros;
 // sensor ports
 #define TRAY_LIMIT 1
 #define A_LIMIT 2
+#define L_ENCODER_TOP 3
+#define L_ENCODER_BOT 4
 #define CUBE_DETECTER 5
+#define GYRO 6
+#define R_ENCODER_TOP 7
+#define R_ENCODER_BOT 8
 
 
 // values
@@ -68,6 +74,9 @@ extern ADIDigitalIn t_limit;
 extern ADIDigitalIn a_limit;
 
 extern ADILineSensor c_detect;
+
+extern ADIEncoder left_enc;
+extern ADIEncoder right_enc;
 
 extern PID arm_pid;
 extern PID tray_pid;

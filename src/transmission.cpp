@@ -87,14 +87,41 @@ void move_tray_PID(double target, double speed) {
 
 
 void score_cubes(double target, double speed, int &step, int &timer_1) {
+  // variables to be updated every loop
   int delta_time;
   delta_time = millis() - timer_1;
+  // switch statement for autonomous scoring
+  /*
+  1. load a cube into the rollers
+  2. pull back the cube to the scoring position
+  3. move the tray to the scoring position with the PID
+  4. wait for the cubes to settle
+  5. outake and drive away from the stack
+  */
   switch (step) {
     case 0 :
+    if (loaded() == false)
+      out_take(70);
+    else {
+      step++;
+      stop_intake();
+    }
+    break;
+    case 1 :
+    if (loaded() == true)
+      in_take(70);
+    else {
+      step++;
+      stop_intake();
+    }
+    break;
+    case 2 :
+    // constants tuned for 10 cubes rn
     tray_pid.set_PID_constants(0.1, 0.005, 0);
     tray_pid.set_PID_variables(target, speed, -speed, 150);
     move_tray(tray_pid.output(tray_position()));
 
+    // get the cubes in the right position tuned range for 10 cubes
     if (tray_position() > 700 && tray_position() < 800) {
       in_take(20);
     }
@@ -102,6 +129,7 @@ void score_cubes(double target, double speed, int &step, int &timer_1) {
       stop_intake();
     }
 
+    // tray never really reaches the target of the PID so end it a bit early
     if (tray_position() >= 955) {
       step++;
       stop_trans();
@@ -109,13 +137,15 @@ void score_cubes(double target, double speed, int &step, int &timer_1) {
       timer_1 = millis();
     }
     break;
-    case 1 :
+    case 3 :
+    // wait for a bit
     if (delta_time > 750) {
       step++;
       timer_1 = millis();
     }
     break;
-    case 2 :
+    case 4 :
+    // move the tray back very slowly so that the rollers are free
     tray_pid.set_PID_constants(0.2, 0, 0);
     tray_pid.set_PID_variables(TRAY_MED, 30, -30, 100);
     move_tray(tray_pid.output(tray_position()));
@@ -126,7 +156,7 @@ void score_cubes(double target, double speed, int &step, int &timer_1) {
       timer_1 = millis();
     }
     break;
-    case 3 :
+    case 5 :
     out_take(50);
     if (delta_time > 200) {
       move_drive(-20, -20);
