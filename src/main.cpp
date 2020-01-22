@@ -226,7 +226,7 @@ void opcontrol() {
 				score_cubes(960, 127, scoring_step, scoring_timer);
 			}
 			else if (tray_state == 0 && tray_limit() == false) {
-				trans_state = TRAY;
+				trans_state = DRIVE;
 				move_tray(-60);
 				scoring_step = 0;
 			}
