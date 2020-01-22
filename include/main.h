@@ -25,6 +25,8 @@ using namespace pros;
 
 // sensor ports
 #define TRAY_LIMIT 1
+#define A_LIMIT 2
+#define CUBE_DETECTER 5
 
 
 // values
@@ -63,6 +65,9 @@ extern Motor intake_left;
 extern Motor intake_right;
 
 extern ADIDigitalIn t_limit;
+extern ADIDigitalIn a_limit;
+
+extern ADILineSensor c_detect;
 
 extern PID arm_pid;
 extern PID tray_pid;

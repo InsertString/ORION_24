@@ -23,6 +23,11 @@ double tray_position() {
 }
 
 
+bool loaded() {
+  return (c_detect.get_value() > 2910) ? false : true;
+}
+
+
 void reset_trans_motors() {
   drive_left_F.tare_position();
 	drive_left_B.tare_position();
@@ -74,7 +79,7 @@ void move_tray(int power) {
 void move_tray_PID(double target, double speed) {
   // 926 perfect value needed
 
-  tray_pid.set_PID_constants(0.1, 0, 0);
+  tray_pid.set_PID_constants(0.3, 0, 0);
   tray_pid.set_PID_variables(target, speed, -speed, 100);
 
   move_tray(tray_pid.output(tray_position()));
@@ -86,24 +91,21 @@ void score_cubes(double target, double speed, int &step, int &timer_1) {
   delta_time = millis() - timer_1;
   switch (step) {
     case 0 :
-    tray_pid.set_PID_constants(0.1, 0, 0);
-    tray_pid.set_PID_variables(target, speed, -speed, 100);
+    tray_pid.set_PID_constants(0.1, 0.005, 0);
+    tray_pid.set_PID_variables(target, speed, -speed, 150);
     move_tray(tray_pid.output(tray_position()));
 
-    if (tray_position() <= 500 && (millis() % 50) == 0) {
+    if (tray_position() > 700 && tray_position() < 800) {
       in_take(20);
-      timer_1 = millis();
-    }
-    else if (tray_position() <= 500 && delta_time > 200) {
-      stop_intake();
     }
     else {
       stop_intake();
     }
 
-    if (tray_position() >= 920) {
+    if (tray_position() >= 955) {
       step++;
       stop_trans();
+      stop_intake();
       timer_1 = millis();
     }
     break;
@@ -114,18 +116,18 @@ void score_cubes(double target, double speed, int &step, int &timer_1) {
     }
     break;
     case 2 :
-    tray_pid.set_PID_constants(0.1, 0, 0);
-    tray_pid.set_PID_variables(TRAY_MED, speed, -speed, 100);
+    tray_pid.set_PID_constants(0.2, 0, 0);
+    tray_pid.set_PID_variables(TRAY_MED, 30, -30, 100);
     move_tray(tray_pid.output(tray_position()));
 
-    if (tray_position() <= 550) {
+    if (tray_position() <= 450) {
       stop_trans();
       step++;
       timer_1 = millis();
     }
     break;
     case 3 :
-    out_take(70);
+    out_take(50);
     if (delta_time > 200) {
       move_drive(-20, -20);
     }
