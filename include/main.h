@@ -20,7 +20,7 @@ using namespace pros;
 #define DRIVE_RIGHT_B 6
 #define DRIVE_ABS_L 15
 #define DRIVE_ABS_R 19
-#define INTAKE_LEFT 13
+#define INTAKE_LEFT 12
 #define INTAKE_RIGHT 17
 #define ARM 10
 

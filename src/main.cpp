@@ -76,7 +76,7 @@ void opcontrol() {
 
 	int arm_timer = 0;
 	int arm_delta_time = 0;
-	int arm_cube_wait = 250;
+	int arm_cube_wait = 1000;
 
 	int tray_state = 0;
 
@@ -98,7 +98,7 @@ void opcontrol() {
 		lcd::print(2, "DriveL[F][M][B]:[%2.0f][%2.0f][%2.0f]", drive_left_F.get_temperature(), drive_left_B.get_temperature(), drive_abs_left.get_temperature());
 		lcd::print(3, "DriveR[F][M][B]:[%2.0f][%2.0f][%2.0f]", drive_right_F.get_temperature(), drive_right_B.get_temperature(), drive_abs_right.get_temperature());
 		lcd::print(4, "Arm:[%2.0f],Roll_L:[%2.0f],Roll_R:[%2.0f]", arm.get_temperature(), intake_left.get_temperature(), intake_right.get_temperature());
-		lcd::print(5, "Roller:[%s], raw:[%4.0f]", roller_status, c_detect.get_value());
+		lcd::print(5, "Roller:[%s], raw:[%4.0d]", roller_status, c_detect.get_value());
 
 
 ///*
@@ -124,7 +124,7 @@ void opcontrol() {
 			if (arm_state == 1) {
 				if (loaded() == true || arm_delta_time > arm_cube_wait) {
 					arm_pid.set_PID_constants(0.6, 0, 0);
-					arm_pid.set_PID_variables(1400, 127, -127, 100);
+					arm_pid.set_PID_variables(1300, 127, -127, 100);
 					arm = arm_pid.output(arm.get_position());
 					if (master.get_digital(DIGITAL_R2)) {
 						out_take(127);
@@ -140,7 +140,7 @@ void opcontrol() {
 			else if (arm_state == 2) {
 				if (loaded() == true || arm_delta_time > arm_cube_wait) {
 					arm_pid.set_PID_constants(0.6, 0, 0);
-					arm_pid.set_PID_variables(1960, 127, -127, 100);
+					arm_pid.set_PID_variables(1900, 127, -127, 100);
 					arm = arm_pid.output(arm.get_position());
 					if (master.get_digital(DIGITAL_R2)) {
 						out_take(127);
@@ -205,7 +205,7 @@ void opcontrol() {
 			trans_state = TRAY;
 			move_tray(30);
 		}
-		else if (master.get_digital_new_press(DIGITAL_DOWN) && tray_limit() == false) {
+		else if (master.get_digital_new_press(DIGITAL_DOWN)) {
 			tray_state = 0;
 			trans_state = TRAY;
 			//move_tray(-60);
@@ -223,11 +223,11 @@ void opcontrol() {
 			}
 			else if (tray_state == 1) {
 				trans_state = TRAY;
-				score_cubes(960, 127, scoring_step, scoring_timer);
+				score_cubes(950, 127, scoring_step, scoring_timer);
 			}
 			else if (tray_state == 0 && tray_limit() == false) {
 				trans_state = DRIVE;
-				move_tray(-60);
+				move_tray(-30);
 				scoring_step = 0;
 			}
 		}
