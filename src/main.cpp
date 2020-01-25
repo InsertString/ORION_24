@@ -76,7 +76,7 @@ void opcontrol() {
 
 	int arm_timer = 0;
 	int arm_delta_time = 0;
-	int arm_cube_wait = 1000;
+	int arm_cube_wait = 400;
 
 	int tray_state = 0;
 
@@ -111,7 +111,7 @@ void opcontrol() {
 			if (arm_state == 1) {
 				arm_state = 2;
 			}
-			else if (arm_state == 0) {
+			else if (arm_state != 1) {
 				arm_state = 1;
 				arm_timer = millis();
 			}
@@ -120,11 +120,15 @@ void opcontrol() {
 			arm_state = 0;
 			arm_timer = millis();
 		}
+		else if (master.get_digital(DIGITAL_A)) {
+			arm = 127;
+			arm_state = 0;
+		}
 		else {
 			if (arm_state == 1) {
 				if (loaded() == true || arm_delta_time > arm_cube_wait) {
 					arm_pid.set_PID_constants(0.6, 0, 0);
-					arm_pid.set_PID_variables(1300, 127, -127, 100);
+					arm_pid.set_PID_variables(1250, 127, -127, 100);
 					arm = arm_pid.output(arm.get_position());
 					if (master.get_digital(DIGITAL_R2)) {
 						out_take(127);
@@ -140,7 +144,7 @@ void opcontrol() {
 			else if (arm_state == 2) {
 				if (loaded() == true || arm_delta_time > arm_cube_wait) {
 					arm_pid.set_PID_constants(0.6, 0, 0);
-					arm_pid.set_PID_variables(1900, 127, -127, 100);
+					arm_pid.set_PID_variables(1875, 127, -127, 100);
 					arm = arm_pid.output(arm.get_position());
 					if (master.get_digital(DIGITAL_R2)) {
 						out_take(127);
@@ -223,7 +227,7 @@ void opcontrol() {
 			}
 			else if (tray_state == 1) {
 				trans_state = TRAY;
-				score_cubes(950, 127, scoring_step, scoring_timer);
+				score_cubes(950, 100, scoring_step, scoring_timer);
 			}
 			else if (tray_state == 0 && tray_limit() == false) {
 				trans_state = DRIVE;
