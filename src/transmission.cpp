@@ -86,7 +86,7 @@ void move_tray_PID(double target, double speed) {
 }
 
 
-void score_cubes(double target, double speed, int &step, int &timer_1) {
+void score_cubes(double target, double speed, int &step, int &timer_1, double kp) {
   // variables to be updated every loop
   int delta_time;
   delta_time = millis() - timer_1;
@@ -116,8 +116,8 @@ void score_cubes(double target, double speed, int &step, int &timer_1) {
   //  }
     break;
     case 2 :
-    // constants tuned for 10 cubes rn
-    tray_pid.set_PID_constants(0.11, 0.0025, 0);
+    // constants tuned for 11 cubes rn
+    tray_pid.set_PID_constants(kp, 0.0025, 0);
     tray_pid.set_PID_variables(target, speed, -speed, 200);
     move_tray(tray_pid.output(tray_position()));
     if (tray_position() < 300) {
