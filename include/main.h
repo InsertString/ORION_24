@@ -8,6 +8,7 @@
 #include "transmission.hpp"
 #include "intake.hpp"
 #include "sys/string.h"
+#include "auto_functions.hpp"
 
 using namespace pros;
 

@@ -108,6 +108,7 @@ void score_cubes(double target, double speed, int &step, int &timer_1, double kp
     if (delta_time > 150) {
       step++;
       in_take(10);
+      timer_1 = millis();
     }
     break;
     case 2 :
@@ -122,7 +123,7 @@ void score_cubes(double target, double speed, int &step, int &timer_1, double kp
       stop_intake();
     }
     // tray never really reaches the target of the PID so end it a bit early
-    if (fabs(tray_position()) >= (target - 15)) {
+    if ((fabs(tray_position()) >= (target - 15)) || (delta_time > 4000)) {
       step++;
       move_tray(0);
       stop_intake();

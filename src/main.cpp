@@ -228,7 +228,7 @@ void opcontrol() {
 			else if (tray_state == 1) {
 				trans_state = TRAY;
 				// current values score 11 cubes extremely consistently
-				score_cubes(930, 127, scoring_step, scoring_timer, 0.1);
+				score_cubes(930, 127, scoring_step, scoring_timer, 0.105);
 			}
 			else if (tray_state == 0 && tray_limit() == false) {
 				trans_state = DRIVE;
