@@ -21,6 +21,8 @@ void score_cubes(double target, double speed, int &step, int &timer_1, double kp
 
 double tray_position();
 
+double drive_position();
+
 bool loaded();
 
 #endif

@@ -6,7 +6,7 @@
 #define AUTO_STEP_TIMER 1
 
 #define AUTO_DRIVE_TIMEOUT 2
-#define AUTO_DRIVE_EXIT 3
+#define AUTO_DRIVE_STEP_EXIT 3
 
 
 void startTimer(int slot);

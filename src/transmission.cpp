@@ -23,6 +23,11 @@ double tray_position() {
 }
 
 
+double drive_position() {
+  return drive_abs_left.get_position();
+}
+
+
 bool loaded() {
   return (c_detect.get_value() > 2920) ? false : true;
 }
@@ -33,6 +38,8 @@ void reset_trans_motors() {
 	drive_left_B.tare_position();
 	drive_right_B.tare_position();
 	drive_right_F.tare_position();
+  drive_abs_left.tare_position();
+  drive_abs_right.tare_position();
 }
 
 

@@ -35,7 +35,8 @@ void PID::set_PID_variables(double target_input, double max_value, double min_va
   target = target_input;
   max = max_value;
   min = min_value;
-  integral_limit = integral_lim;
+  // just in case you enter a negative integral limit
+  integral_limit = fabs(integral_lim);
 }
 
 
