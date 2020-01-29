@@ -11,6 +11,6 @@
 #define AUTO_DRIVE_I_LIM 3
 
 // all values entered should be possitive integers / doubles
-void auto_drive(int direction, int &step, int target, int start_power, double precision, double accel_vars[], double deccel_vars[], int time_limit);
+void auto_drive(int direction, int &step, int target, int start_power, const double precision, const double accel_vars[], double deccel_vars[], int time_limit);
 
 #endif

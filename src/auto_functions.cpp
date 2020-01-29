@@ -5,7 +5,7 @@
 
 PID Auto_Drive_PID;
 
-void auto_drive(int direction, int &step, int target, int start_power, double precision, double accel_vars[], double deccel_vars[], int max_power, int time_limit) {
+void auto_drive(int direction, int &step, int target, int start_power, double precision, const double accel_vars[], const double deccel_vars[], int max_power, int time_limit) {
 
   // mamy absolute values are taken in order to account for user error
 

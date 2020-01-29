@@ -9,6 +9,7 @@
 #include "intake.hpp"
 #include "sys/string.h"
 #include "auto_functions.hpp"
+#include "timing.hpp"
 
 using namespace pros;
 

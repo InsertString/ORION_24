@@ -59,9 +59,50 @@ void disabled() {}
 void competition_initialize() {}
 
 
+// move all this junk auto stuff to its own file
 
+int auto_step = 0;
+int drive_step = 0;
+int turn_step = 0;
+int tray_step = 0;
 
-void autonomous() {}
+double a[4] = {0.1, 0, 0, 100};
+double d[4] = {0.1, 0, 0, 100};
+
+bool con1 = false;
+bool con2 = false;
+bool con3 = false;
+
+void move_steps(bool condition1, bool condition2, bool condition3, int &step, int time_limit) {
+	if ((condition1 == true && condition2 == true && condition3 == true) || getTime(AUTO_STEP_TIMER) >= time_limit) {
+		step++;
+		stop_trans();
+	}
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
+void autonomous() {
+	// stuff in here is for testing only, move to other file
+	startTimer(AUTO_TIMER);
+	startTimer(AUTO_STEP_TIMER);
+
+	while (getTime(AUTO_TIMER) <= 45000) {
+		switch (auto_step) {
+			case 0 :
+			auto_drive(AUTO_DRIVE_FORWARD, drive_step, 1000, 20, 0.02, a, d, 5000);
+
+			con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
+			con2 = true;
+			con3 = true;
+
+			move_steps(con1, con2, con3, auto_step, 5000);
+			break;
+			case 1 :
+			break;
+		}
+	}
+}
 
 
 void opcontrol() {
