@@ -76,7 +76,7 @@ void opcontrol() {
 
 	int arm_timer = 0;
 	int arm_delta_time = 0;
-	int arm_cube_wait = 400;
+	int arm_cube_wait = 125;
 
 	int tray_state = 0;
 
@@ -126,7 +126,7 @@ void opcontrol() {
 		}
 		else {
 			if (arm_state == 1) {
-				if (loaded() == true || arm_delta_time > arm_cube_wait) {
+				if (arm_delta_time > arm_cube_wait || loaded() == false) {
 					arm_pid.set_PID_constants(0.6, 0, 0);
 					arm_pid.set_PID_variables(1250, 127, -127, 100);
 					arm = arm_pid.output(arm.get_position());
@@ -142,7 +142,7 @@ void opcontrol() {
 				}
 			}
 			else if (arm_state == 2) {
-				if (loaded() == true || arm_delta_time > arm_cube_wait) {
+				if (arm_delta_time > arm_cube_wait || loaded() == false) {
 					arm_pid.set_PID_constants(0.6, 0, 0);
 					arm_pid.set_PID_variables(1875, 127, -127, 100);
 					arm = arm_pid.output(arm.get_position());
@@ -228,7 +228,7 @@ void opcontrol() {
 			else if (tray_state == 1) {
 				trans_state = TRAY;
 				// current values score 11 cubes extremely consistently
-				score_cubes(950, 100, scoring_step, scoring_timer, 0.11);
+				score_cubes(930, 127, scoring_step, scoring_timer, 0.1);
 			}
 			else if (tray_state == 0 && tray_limit() == false) {
 				trans_state = DRIVE;

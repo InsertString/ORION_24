@@ -100,31 +100,29 @@ void score_cubes(double target, double speed, int &step, int &timer_1, double kp
   */
   switch (step) {
     case 0 :
-    if (loaded() == false)
-      out_take(50);
-    else {
-      step++;
-      stop_intake();
-    }
+    step++;
+    timer_1 = millis();
     break;
     case 1 :
-    //if (loaded() == true)
-    //  in_take(127);
-    //else {
-      //top_intake();
+    out_take(100);
+    if (delta_time > 150) {
       step++;
-  //  }
+      in_take(10);
+    }
     break;
     case 2 :
     // constants tuned for 11 cubes rn
-    tray_pid.set_PID_constants(kp, 0.0025, 0);
+    tray_pid.set_PID_constants(kp, 0.002, 0.1);
     tray_pid.set_PID_variables(target, speed, -speed, 200);
     move_tray(tray_pid.output(tray_position()));
-    if (tray_position() < 300) {
-      in_take(20);
+    if (fabs(tray_position()) < 700) {
+      in_take(10);
+    }
+    else {
+      stop_intake();
     }
     // tray never really reaches the target of the PID so end it a bit early
-    if (tray_position() >= (target - 2)) {
+    if (fabs(tray_position()) >= (target - 15)) {
       step++;
       move_tray(0);
       stop_intake();
@@ -134,31 +132,31 @@ void score_cubes(double target, double speed, int &step, int &timer_1, double kp
     case 3 :
     stop_trans();
     // wait for a bit
-    if (delta_time > 750) {
+    if (delta_time > 1500) {
       step++;
       timer_1 = millis();
     }
     break;
     case 4 :
     // move the tray back very slowly so that the rollers are free
-    /*
+    ///*
     tray_pid.set_PID_constants(0.2, 0, 0);
     tray_pid.set_PID_variables(TRAY_MED, 30, -30, 100);
     move_tray(tray_pid.output(tray_position()));
-    out_take(30);
-    */
+    //out_take(30);
+    //*/
 
-  //  if (tray_position() <= 450) {
+    if (tray_position() <= 450) {
       stop_trans();
       stop_intake();
       step++;
       timer_1 = millis();
-  //  }
+    }
     break;
     case 5 :
-    //out_take(50);
+    out_take(40);
     //if (delta_time > 200) {
-      move_drive(-20, -20);
+    move_drive(-20, -20);
     //}
     break;
   }
