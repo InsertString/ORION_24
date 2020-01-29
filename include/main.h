@@ -10,6 +10,8 @@
 #include "sys/string.h"
 #include "auto_functions.hpp"
 #include "timing.hpp"
+#include "auto_codes.hpp"
+#include "auto_setup.hpp"
 
 using namespace pros;
 
@@ -29,12 +31,9 @@ using namespace pros;
 // sensor ports
 #define TRAY_LIMIT 1
 #define A_LIMIT 2
-#define L_ENCODER_TOP 3
-#define L_ENCODER_BOT 4
 #define CUBE_DETECTER 5
 #define GYRO 6
-#define R_ENCODER_TOP 7
-#define R_ENCODER_BOT 8
+#define AUTO_POT 7
 
 
 // values
@@ -44,6 +43,9 @@ using namespace pros;
 #define TRAY_SLOW 700
 #define TRAY_MID 500
 #define TRAY_MED 300
+
+#define RED 1
+#define BLUE 2
 
 #ifdef __cplusplus
 extern "C" {
@@ -68,6 +70,7 @@ extern Motor drive_left_F;
 extern Motor drive_right_F;
 extern Motor drive_abs_left;
 extern Motor drive_abs_right;
+extern Motor arm;
 
 extern Motor intake_left;
 extern Motor intake_right;
@@ -77,10 +80,11 @@ extern ADIDigitalIn a_limit;
 
 extern ADILineSensor c_detect;
 
-extern ADIEncoder left_enc;
-extern ADIEncoder right_enc;
+extern ADIPotentiometer auto_pot;
 
 extern PID arm_pid;
 extern PID tray_pid;
+
+extern int auto_colour;
 
 #endif  // _PROS_MAIN_H_

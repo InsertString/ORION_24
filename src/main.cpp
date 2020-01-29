@@ -26,8 +26,7 @@ ADIDigitalIn a_limit(A_LIMIT);
 
 ADILineSensor c_detect(CUBE_DETECTER);
 
-ADIEncoder left_enc(L_ENCODER_TOP,L_ENCODER_BOT,false);
-ADIEncoder right_enc(R_ENCODER_TOP,R_ENCODER_BOT,false);
+ADIPotentiometer auto_pot(AUTO_POT);
 
 //PID objects
 PID arm_pid;
@@ -61,47 +60,11 @@ void competition_initialize() {}
 
 // move all this junk auto stuff to its own file
 
-int auto_step = 0;
-int drive_step = 0;
-int turn_step = 0;
-int tray_step = 0;
-
-double a[4] = {0.1, 0, 0, 100};
-double d[4] = {0.1, 0, 0, 100};
-
-bool con1 = false;
-bool con2 = false;
-bool con3 = false;
-
-void move_steps(bool condition1, bool condition2, bool condition3, int &step, int time_limit) {
-	if ((condition1 == true && condition2 == true && condition3 == true) || getTime(AUTO_STEP_TIMER) >= time_limit) {
-		step++;
-		stop_trans();
-	}
-}
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 
 void autonomous() {
-	// stuff in here is for testing only, move to other file
-	startTimer(AUTO_TIMER);
-	startTimer(AUTO_STEP_TIMER);
-
-	while (getTime(AUTO_TIMER) <= 45000) {
-		switch (auto_step) {
-			case 0 :
-			auto_drive(AUTO_DRIVE_FORWARD, drive_step, 1000, 20, 0.02, a, d, 5000);
-
-			con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
-			con2 = true;
-			con3 = true;
-
-			move_steps(con1, con2, con3, auto_step, 5000);
-			break;
-			case 1 :
-			break;
-		}
-	}
+	auto_loop();
 }
 
 
@@ -122,8 +85,12 @@ void opcontrol() {
 	int tray_state = 0;
 
 	std::string roller_status = "EMPTY";
+	std::string a_colour = (auto_pot.get_value() > 2047) ? "RED" : "BLUE";
 
 	while (true) {
+
+		auto_colour = (auto_pot.get_value() > 2047) ? RED : BLUE;
+		a_colour = (auto_pot.get_value() > 2047) ? "RED" : "BLUE";
 
 		arm_delta_time = millis() - arm_timer;
 
@@ -135,11 +102,12 @@ void opcontrol() {
 		}
 
 		lcd::print(0, "TrayPos:[%4.0f],ArmPos:[%4.0f]", tray_position(), arm.get_position());
-		lcd::print(1, "TEMPS:");
-		lcd::print(2, "DriveL[F][M][B]:[%2.0f][%2.0f][%2.0f]", drive_left_F.get_temperature(), drive_left_B.get_temperature(), drive_abs_left.get_temperature());
-		lcd::print(3, "DriveR[F][M][B]:[%2.0f][%2.0f][%2.0f]", drive_right_F.get_temperature(), drive_right_B.get_temperature(), drive_abs_right.get_temperature());
-		lcd::print(4, "Arm:[%2.0f],Roll_L:[%2.0f],Roll_R:[%2.0f]", arm.get_temperature(), intake_left.get_temperature(), intake_right.get_temperature());
-		lcd::print(5, "Roller:[%s], raw:[%4.0d]", roller_status, c_detect.get_value());
+    lcd::print(1, "Auto Colour : [%s]", a_colour);
+		lcd::print(2, "TEMPS:");
+		lcd::print(3, "DriveL[F][M][B]:[%2.0f][%2.0f][%2.0f]", drive_left_F.get_temperature(), drive_left_B.get_temperature(), drive_abs_left.get_temperature());
+		lcd::print(4, "DriveR[F][M][B]:[%2.0f][%2.0f][%2.0f]", drive_right_F.get_temperature(), drive_right_B.get_temperature(), drive_abs_right.get_temperature());
+		lcd::print(5, "Arm:[%2.0f],Roll_L:[%2.0f],Roll_R:[%2.0f]", arm.get_temperature(), intake_left.get_temperature(), intake_right.get_temperature());
+		lcd::print(6, "Roller:[%s], raw:[%4.0d]", roller_status, c_detect.get_value());
 
 
 ///*
