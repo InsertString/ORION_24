@@ -74,7 +74,12 @@ void auto_loop() {
 
 void auto_red() {
   switch (auto_step) {
-
+    case 0 :
+    auto_drive(AUTO_DRIVE_FORWARD, drive_step, 2000, 10, 0.02, a, d, 127, 5000);
+    con2 = con3 = true;
+    con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
+    move_steps(con1, con2, con3, auto_step, 2000);
+    break;
   }
 }
 

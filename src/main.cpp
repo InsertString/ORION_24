@@ -6,11 +6,8 @@ Controller master(E_CONTROLLER_MASTER);
 
 // motor definition
 Motor drive_left_F(DRIVE_LEFT_F);
-
 Motor drive_left_B(DRIVE_LEFT_B);
-
 Motor drive_right_F(DRIVE_RIGHT_F);
-
 Motor drive_right_B(DRIVE_RIGHT_B);
 
 Motor drive_abs_left(DRIVE_ABS_L);

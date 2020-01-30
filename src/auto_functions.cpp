@@ -93,7 +93,7 @@ void auto_drive(int direction, int &step, int target, int start_power, double pr
 
 PID Auto_Turn_PID;
 
-void auto_turn(int direction, int &step, int raw_target, int start_power, const double precision, const double accel_vars[], double deccel_vars[], int max_power, int time_limit) {
+void auto_turn(int direction, int &step, int raw_target, int start_power, double precision, const double accel_vars[], const double deccel_vars[], int max_power, int time_limit) {
 
   int target = abs(raw_target) * direction;
   int half_target = target / 2;

@@ -23,6 +23,6 @@ void auto_drive(int direction, int &step, int target, int start_power, const dou
 #define AUTO_TURN_I_LIM 3
 
 // all values entered should be positive integer / doubles
-void auto_turn(int direction, int &step, int target, int start_power, const double precision, const double accel_vars[], double deccel_vars[], int max_power, int time_limit);
+void auto_turn(int direction, int &step, int target, int start_power, double precision, const double accel_vars[], const double deccel_vars[], int max_power, int time_limit);
 
 #endif
