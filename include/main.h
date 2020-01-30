@@ -82,6 +82,8 @@ extern ADILineSensor c_detect;
 
 extern ADIPotentiometer auto_pot;
 
+extern ADIGyro gyro;
+
 extern PID arm_pid;
 extern PID tray_pid;
 

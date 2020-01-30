@@ -45,6 +45,9 @@ void auto_loop() {
 
 	while (getTime(AUTO_TIMER) <= 45000) {
 
+    if (master.get_digital_new_press(DIGITAL_B))
+      break;
+
 
     if (loaded() == true)
 			roller_status = "LOADED";
@@ -62,6 +65,9 @@ void auto_loop() {
 
 		auto_selection();
 	}
+
+  stop_trans();
+  stop_intake();
 }
 
 
