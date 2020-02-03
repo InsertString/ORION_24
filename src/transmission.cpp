@@ -24,7 +24,7 @@ double tray_position() {
 
 
 double drive_position() {
-  return drive_abs_left.get_position();
+  return -drive_abs_left.get_position();
 }
 
 
@@ -112,7 +112,7 @@ void score_cubes(double target, double speed, int &step, int &timer_1, double kp
     break;
     case 1 :
     out_take(100);
-    if (delta_time > 150) {
+    if (delta_time > 175) {
       step++;
       in_take(10);
       timer_1 = millis();
@@ -120,17 +120,17 @@ void score_cubes(double target, double speed, int &step, int &timer_1, double kp
     break;
     case 2 :
     // constants tuned for 11 cubes rn
-    tray_pid.set_PID_constants(kp, 0.002, 0.1);
+    tray_pid.set_PID_constants(kp, 0.0025, 0.5);
     tray_pid.set_PID_variables(target, speed, -speed, 200);
     move_tray(tray_pid.output(tray_position()));
-    if (fabs(tray_position()) < 700) {
+    if (fabs(tray_position()) < 775) {
       in_take(10);
     }
     else {
       stop_intake();
     }
     // tray never really reaches the target of the PID so end it a bit early
-    if ((fabs(tray_position()) >= (target - 15)) || (delta_time > 4000)) {
+    if ((fabs(tray_position()) >= (target - 2)) || (delta_time > 4000)) {
       step++;
       move_tray(0);
       stop_intake();
@@ -162,7 +162,7 @@ void score_cubes(double target, double speed, int &step, int &timer_1, double kp
     }
     break;
     case 5 :
-    out_take(40);
+    out_take(50);
     //if (delta_time > 200) {
     move_drive(-20, -20);
     //}

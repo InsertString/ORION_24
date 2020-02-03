@@ -30,6 +30,7 @@ ADIGyro gyro(GYRO);
 PID arm_pid;
 PID tray_pid;
 
+int auto_running = 0;
 
 void initialize() {
 
@@ -43,6 +44,8 @@ void initialize() {
 
 	//intake_left.set_current_limit(2000);
 	//intake_right.set_current_limit(2000);
+
+	gyro.reset();
 }
 
 
@@ -81,7 +84,6 @@ void opcontrol() {
 	int arm_cube_wait = 125;
 
 	int tray_state = 0;
-	int auto_running = 0;
 
 	std::string roller_status = "EMPTY";
 	std::string a_colour = (auto_pot.get_value() > 2047) ? "RED" : "BLUE";
@@ -263,7 +265,7 @@ void opcontrol() {
 				else if (tray_state == 1) {
 					trans_state = TRAY;
 					// current values score 11 cubes extremely consistently
-					score_cubes(930, 127, scoring_step, scoring_timer, 0.105);
+					score_cubes(930, 100, scoring_step, scoring_timer, 0.12);
 				}
 				else if (tray_state == 0 && tray_limit() == false) {
 					trans_state = DRIVE;

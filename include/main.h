@@ -88,5 +88,6 @@ extern PID arm_pid;
 extern PID tray_pid;
 
 extern int auto_colour;
+extern int auto_running;
 
 #endif  // _PROS_MAIN_H_
