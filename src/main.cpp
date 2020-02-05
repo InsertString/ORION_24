@@ -31,6 +31,7 @@ PID arm_pid;
 PID tray_pid;
 
 int auto_running = 0;
+int scoring_step = 0;
 
 void initialize() {
 
@@ -76,12 +77,12 @@ void opcontrol() {
 	arm.tare_position();
 
 	int arm_state = 0;
-	int scoring_step = 0;
+
 	int scoring_timer = 0;
 
 	int arm_timer = 0;
 	int arm_delta_time = 0;
-	int arm_cube_wait = 125;
+	int arm_cube_wait = 1000;
 
 	int tray_state = 0;
 
@@ -139,6 +140,7 @@ void opcontrol() {
 ///*
 
 		if (auto_running == 0) {
+
 			// arm ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 			if (a_limit.get_value() == 1) {
 				arm.tare_position();
@@ -163,7 +165,7 @@ void opcontrol() {
 			}
 			else {
 				if (arm_state == 1) {
-					if (arm_delta_time > arm_cube_wait || loaded() == false) {
+					if (arm_delta_time > arm_cube_wait || loaded() == true) {
 						arm_pid.set_PID_constants(0.6, 0, 0);
 						arm_pid.set_PID_variables(1250, 127, -127, 100);
 						arm = arm_pid.output(arm.get_position());
@@ -179,7 +181,7 @@ void opcontrol() {
 					}
 				}
 				else if (arm_state == 2) {
-					if (arm_delta_time > arm_cube_wait || loaded() == false) {
+					if (arm_delta_time > arm_cube_wait || loaded() == true) {
 						arm_pid.set_PID_constants(0.6, 0, 0);
 						arm_pid.set_PID_variables(1875, 127, -127, 100);
 						arm = arm_pid.output(arm.get_position());
@@ -216,7 +218,7 @@ void opcontrol() {
 					out_take(70);
 				}
 			}
-			else if (master.get_digital(DIGITAL_DOWN) || master.get_digital(DIGITAL_L1)) {}
+			else if (master.get_digital(DIGITAL_DOWN) || master.get_digital(DIGITAL_L1) || arm_state == 1) {}
 			else if (arm_state == 0) {
 				stop_intake();
 			}
@@ -225,6 +227,7 @@ void opcontrol() {
 
 
 			// drive ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+
 			if (trans_state == DRIVE) {
 				move_drive(master.get_analog(ANALOG_LEFT_Y), master.get_analog(ANALOG_RIGHT_Y));
 			}
@@ -265,7 +268,7 @@ void opcontrol() {
 				else if (tray_state == 1) {
 					trans_state = TRAY;
 					// current values score 11 cubes extremely consistently
-					score_cubes(930, 100, scoring_step, scoring_timer, 0.12);
+					score_cubes(935, 100, scoring_step, scoring_timer, 0.12);
 				}
 				else if (tray_state == 0 && tray_limit() == false) {
 					trans_state = DRIVE;

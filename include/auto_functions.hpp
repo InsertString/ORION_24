@@ -29,6 +29,6 @@ void auto_turn(int direction, int &step, int target, int start_power, double pre
 
 void auto_arm(int &step, int target, double kp, double ki, double kd, int i_lim, int max_power);
 
-
+void drive_along_wall(int direction, int &step, int target, int start_power, double precision, const double accel_vars[], const double deccel_vars[], int max_power, int time_limit);
 
 #endif

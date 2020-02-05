@@ -95,8 +95,8 @@ void move_tray_PID(double target, double speed) {
 
 void score_cubes(double target, double speed, int &step, int &timer_1, double kp) {
   // variables to be updated every loop
-  int delta_time;
-  delta_time = millis() - timer_1;
+  //int getTime(SCORE_CUBES_TIMER);
+  //getTime(SCORE_CUBES_TIMER) = millis() - timer_1;
   // switch statement for autonomous scoring
   /*
   1. load a cube into the rollers
@@ -108,19 +108,20 @@ void score_cubes(double target, double speed, int &step, int &timer_1, double kp
   switch (step) {
     case 0 :
     step++;
-    timer_1 = millis();
+    startTimer(SCORE_CUBES_TIMER);
+    reset_trans_motors();
     break;
     case 1 :
     out_take(100);
-    if (delta_time > 175) {
+    if (getTime(SCORE_CUBES_TIMER) > 175) {
       step++;
       in_take(10);
-      timer_1 = millis();
+      startTimer(SCORE_CUBES_TIMER);
     }
     break;
     case 2 :
     // constants tuned for 11 cubes rn
-    tray_pid.set_PID_constants(kp, 0.0025, 0.5);
+    tray_pid.set_PID_constants(kp, 0.0025, 0.55);
     tray_pid.set_PID_variables(target, speed, -speed, 200);
     move_tray(tray_pid.output(tray_position()));
     if (fabs(tray_position()) < 775) {
@@ -130,19 +131,19 @@ void score_cubes(double target, double speed, int &step, int &timer_1, double kp
       stop_intake();
     }
     // tray never really reaches the target of the PID so end it a bit early
-    if ((fabs(tray_position()) >= (target - 2)) || (delta_time > 4000)) {
+    if ((fabs(tray_position()) >= (target - 2)) || (getTime(SCORE_CUBES_TIMER) > 4000)) {
       step++;
       move_tray(0);
       stop_intake();
-      timer_1 = millis();
+      startTimer(SCORE_CUBES_TIMER);
     }
     break;
     case 3 :
     stop_trans();
     // wait for a bit
-    if (delta_time > 1500) {
+    if (getTime(SCORE_CUBES_TIMER) > 1500) {
       step++;
-      timer_1 = millis();
+      startTimer(SCORE_CUBES_TIMER);
     }
     break;
     case 4 :
@@ -158,12 +159,12 @@ void score_cubes(double target, double speed, int &step, int &timer_1, double kp
       stop_trans();
       stop_intake();
       step++;
-      timer_1 = millis();
+      startTimer(SCORE_CUBES_TIMER);
     }
     break;
     case 5 :
     out_take(50);
-    //if (delta_time > 200) {
+    //if (getTime(SCORE_CUBES_TIMER) > 200) {
     move_drive(-20, -20);
     //}
     break;

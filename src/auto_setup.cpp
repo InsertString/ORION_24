@@ -10,3 +10,14 @@ void move_steps(bool condition1, bool condition2, bool condition3, int &step, in
 	}
 	else {}
 }
+
+
+void move_steps(int &step, int time_limit) {
+	if (getTime(AUTO_STEP_TIMER) >= time_limit) {
+		step++;
+		reset_values();
+		stop_trans();
+		startTimer(AUTO_STEP_TIMER);
+	}
+	else {}
+}

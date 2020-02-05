@@ -16,6 +16,8 @@
 #define AUTO_ARM_TIMEOUT 8
 #define AUTO_ARM_STEP_EXIT 9
 
+#define SCORE_CUBES_TIMER 10
+
 
 void startTimer(int slot);
 int getTime(int slot);
