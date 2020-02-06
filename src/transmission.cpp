@@ -163,7 +163,7 @@ void score_cubes(double target, double speed, int &step, int &timer_1, double kp
     }
     break;
     case 5 :
-    out_take(50);
+    out_take(30);
     //if (getTime(SCORE_CUBES_TIMER) > 200) {
     move_drive(-20, -20);
     //}

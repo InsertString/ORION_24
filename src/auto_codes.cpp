@@ -303,7 +303,207 @@ void auto_blue() {
 
 
 void auto_red() {
-  
+  switch (auto_step) {
+    // flip out tray
+    case 0 :
+    auto_arm(arm_step, 1875, 0.6, 0, 0, 0, 127);
+
+    if (arm.get_position() > 1600) {
+      out_take(127);
+    }
+
+    con1 = (arm.get_position() > 1700);
+    con2 = true;
+    con3 = true;
+
+    //if (arm.get_position() > 1000) {
+    //  auto_step++;
+    //}
+
+    move_steps(con1, con2, con3, auto_step, 1000);
+    break;
+    case 1 :
+    auto_arm(arm_step, 0, 0, 0, 0, 0, 0);
+
+    if (arm.get_position() < 500) {
+      con1 = true;
+      in_take(127);
+    }
+
+    con2 = arm.get_position() == 0;
+    con3 = true;
+
+    move_steps(con1, con2, con3, auto_step, 2000);
+    break;
+    // intake 5 (4 field, 1 preload) cubes and drive forward
+    case 2 :
+    auto_arm(arm_step, 0, 0, 0, 0, 0, 0);
+    set_a(0, 0, 0, 0);
+    set_d(0.2, 0.01, 0.3, 50);
+    auto_drive(AUTO_DRIVE_FORWARD, drive_step, 2500, 30, 0.1, a, d, 30, 6000);
+    con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 6000);
+    break;
+    // turn towards cube 6
+    case 3 :
+    auto_arm(arm_step, 0, 0, 0, 0, 0, 0);
+    stop_intake();
+    set_a(0,0,0,0);
+    set_d(0.15, 0.002, 0, 50);
+    auto_turn(AUTO_TURN_L, turn_step, 500, 40, 0.01, a, d, 50, 1000);
+    con1 = (turn_step == AUTO_TURN_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 6000);
+    break;
+    // intake cube 6
+    case 4 :
+    in_take(127);
+    auto_arm(arm_step, 0, 0, 0, 0, 0, 0);
+    set_a(0, 0, 0, 0);
+    set_d(0.2, 0.01, 0.3, 50);
+    auto_drive(AUTO_DRIVE_FORWARD, drive_step, 850, 30, 0.1, a, d, 30, 6000);
+    con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 6000);
+    break;
+    // wait for cube six to intake
+    case 5 :
+    in_take(127);
+    if (con1 == true) {
+      stop_intake();
+      auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 300, 30, 0.1, a, d, 30, 1000);
+    }
+    con1 = (getTime(AUTO_STEP_TIMER) >= 1000);
+    con2 = (drive_step == AUTO_DRIVE_MAX_STEP);
+    con3 = true;
+    move_steps(con1, con2, con3, auto_step, 2000);
+    break;
+    // turn to set up for cubes 7-10
+    case 6 :
+    set_a(0, 0, 0, 0);
+    set_d(0.15, 0.002, 0, 50);
+    auto_turn(AUTO_TURN_R, turn_step, 800, 50, 0.01, a, d, 50, 2000);
+    con1 = (turn_step == AUTO_TURN_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 2000);
+    break;
+    // drive back to set up for cubes 7-10
+    case 7 :
+    set_a(0, 0, 0, 0);
+    set_d(0.2, 0.01, 0.3, 50);
+    auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 3200, 70, 0.1, a, d, 70, 6000);
+    con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 6000);
+    break;
+    // turn towards cubes 7-10
+    case 8 :
+    stop_intake();
+    set_a(0, 0, 0, 0);
+    set_d(0.15, 0.002, 0, 50);
+    auto_turn(AUTO_TURN_L, turn_step, 330, 50, 0.01, a, d, 50, 1000);
+    con1 = (turn_step == AUTO_TURN_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 1000);
+    break;
+    // line up against the wall
+    case 9 :
+    set_a(0, 0, 0, 0);
+    set_d(0.2, 0.01, 0.3, 50);
+    auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 500, 70, 0.1, a, d, 70, 1000);
+    con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 1000);
+    break;
+    // intake cubes 7-10
+    case 10 :
+    in_take(127);
+    auto_arm(arm_step, 0, 0, 0, 0, 0, 0);
+    set_a(0, 0, 0, 0);
+    set_d(0.2, 0.01, 0.3, 50);
+    auto_drive(AUTO_DRIVE_FORWARD, drive_step, 3350, 30, 0.1, a, d, 30, 10000);
+    con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 10000);
+    break;
+    // drive halfway back
+    case 11 :
+    set_a(0, 0, 0, 0);
+    set_d(0.2, 0.01, 0.3, 50);
+    auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 1800, 70, 0.1, a, d, 70, 10000);
+    con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 10000);
+    break;
+    // turn to avoid a tower cube
+    case 12 :
+    stop_intake();
+    set_a(0, 0, 0, 0);
+    set_d(0.15, 0.002, 0, 50);
+    auto_turn(AUTO_TURN_L, turn_step, 300, 70, 0.01, a, d, 70, 1500);
+    con1 = (turn_step == AUTO_TURN_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 1500);
+    break;
+    // drive to avoid tower cube
+    case 13 :
+    stop_intake();
+    set_a(0, 0, 0, 0);
+    set_d(0.2, 0.01, 0.3, 50);
+    auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 900, 70, 0.1, a, d, 70, 10000);
+    con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 10000);
+    break;
+    // turn into the wall
+    case 14 :
+    set_a(0, 0, 0, 0);
+    set_d(0.15, 0.002, 0, 50);
+    auto_turn(AUTO_TURN_L, turn_step, 800, 70, 0.01, a, d, 70, 3000);
+    con1 = (turn_step == AUTO_TURN_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 2000);
+    break;
+    // drive into the scoring zone
+    case 15 :
+    in_take(127);
+    set_a(0, 0, 0, 0);
+    set_d(0.2, 0.01, 0.3, 50);
+    //auto_drive(AUTO_DRIVE_FORWARD, drive_step, 4000, 30, 0.1, a, d, 80, 10000);
+    drive_along_wall(AUTO_DRIVE_FORWARD, drive_step, 4000, 30, 0.1, a, d, 80, 10000, false);
+    con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 10000);
+    scoring_timer = 0;
+    break;
+    case 16 :
+    in_take(127);
+    set_a(0.02, 0, 0, 0);
+    set_d(0.2, 0.01, 0.3, 50);
+    //auto_drive(AUTO_DRIVE_FORWARD, drive_step, 1200, 30, 0.1, a, d, 50, 10000);
+    drive_along_wall(AUTO_DRIVE_FORWARD, drive_step, 3000, 50, 0.1, a, d, 50, 10000, true);
+    con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
+    con2 = con3 = true;
+    move_steps(con1, con2, con3, auto_step, 10000);
+    scoring_timer = 0;
+    break;
+    case 17 :
+    stop_intake();
+    if (tray_limit()) {
+      move_drive(0, 0);
+      move_steps(auto_step, 1000);
+      reset_trans_motors();
+    }
+    else
+      move_tray(-70);
+    break;
+    case 18 :
+    auto_arm(arm_step, 0, 0, 0, 0, 0, 0);
+    score_cubes(935, 100, tray_step, scoring_timer, 0.12);
+    delay(20);
+    break;
+  }
 }
 
 

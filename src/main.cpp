@@ -89,12 +89,12 @@ void opcontrol() {
 	int tray_state = 0;
 
 	std::string roller_status = "EMPTY";
-	std::string a_colour = (auto_pot.get_value() > 2047) ? "RED" : "BLUE";
+	std::string a_colour = (auto_pot.get_value() > 2047) ? "BLUE" : "RED";
 
 	while (true) {
 
-		auto_colour = (auto_pot.get_value() > 2047) ? RED : BLUE;
-		a_colour = (auto_pot.get_value() > 2047) ? "RED" : "BLUE";
+		auto_colour = (auto_pot.get_value() > 2047) ? BLUE : RED;
+		a_colour = (auto_pot.get_value() > 2047) ? "BLUE" : "RED";
 
 		arm_delta_time = millis() - arm_timer;
 
