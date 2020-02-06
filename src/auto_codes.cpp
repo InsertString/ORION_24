@@ -177,10 +177,10 @@ void auto_blue() {
     case 6 :
     set_a(0, 0, 0, 0);
     set_d(0.15, 0.002, 0, 50);
-    auto_turn(AUTO_TURN_L, turn_step, 730, 50, 0.01, a, d, 50, 3000);
+    auto_turn(AUTO_TURN_L, turn_step, 730, 50, 0.01, a, d, 50, 2000);
     con1 = (turn_step == AUTO_TURN_MAX_STEP);
     con2 = con3 = true;
-    move_steps(con1, con2, con3, auto_step, 3000);
+    move_steps(con1, con2, con3, auto_step, 2000);
     break;
     // drive back to set up for cubes 7-10
     case 7 :
@@ -196,10 +196,10 @@ void auto_blue() {
     stop_intake();
     set_a(0, 0, 0, 0);
     set_d(0.15, 0.002, 0, 50);
-    auto_turn(AUTO_TURN_R, turn_step, 330, 50, 0.01, a, d, 50, 2000);
+    auto_turn(AUTO_TURN_R, turn_step, 330, 50, 0.01, a, d, 50, 1000);
     con1 = (turn_step == AUTO_TURN_MAX_STEP);
     con2 = con3 = true;
-    move_steps(con1, con2, con3, auto_step, 2000);
+    move_steps(con1, con2, con3, auto_step, 1000);
     break;
     // line up against the wall
     case 9 :
@@ -235,10 +235,10 @@ void auto_blue() {
     stop_intake();
     set_a(0, 0, 0, 0);
     set_d(0.15, 0.002, 0, 50);
-    auto_turn(AUTO_TURN_R, turn_step, 200, 70, 0.01, a, d, 70, 2000);
+    auto_turn(AUTO_TURN_R, turn_step, 200, 70, 0.01, a, d, 70, 1500);
     con1 = (turn_step == AUTO_TURN_MAX_STEP);
     con2 = con3 = true;
-    move_steps(con1, con2, con3, auto_step, 2000);
+    move_steps(con1, con2, con3, auto_step, 1500);
     break;
     // drive to avoid tower cube
     case 13 :
@@ -254,7 +254,7 @@ void auto_blue() {
     case 14 :
     set_a(0, 0, 0, 0);
     set_d(0.15, 0.002, 0, 50);
-    auto_turn(AUTO_TURN_R, turn_step, 800, 70, 0.01, a, d, 70, 3000);
+    auto_turn(AUTO_TURN_R, turn_step, 750, 70, 0.01, a, d, 70, 3000);
     con1 = (turn_step == AUTO_TURN_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 2000);
@@ -265,7 +265,7 @@ void auto_blue() {
     set_a(0, 0, 0, 0);
     set_d(0.2, 0.01, 0.3, 50);
     //auto_drive(AUTO_DRIVE_FORWARD, drive_step, 4000, 30, 0.1, a, d, 80, 10000);
-    drive_along_wall(AUTO_DRIVE_FORWARD, drive_step, 4000, 30, 0.1, a, d, 80, 10000);
+    drive_along_wall(AUTO_DRIVE_FORWARD, drive_step, 4000, 30, 0.1, a, d, 80, 10000, false);
     con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 10000);
@@ -276,7 +276,7 @@ void auto_blue() {
     set_a(0.02, 0, 0, 0);
     set_d(0.2, 0.01, 0.3, 50);
     //auto_drive(AUTO_DRIVE_FORWARD, drive_step, 1200, 30, 0.1, a, d, 50, 10000);
-    drive_along_wall(AUTO_DRIVE_FORWARD, drive_step, 1500, 50, 0.1, a, d, 70, 10000);
+    drive_along_wall(AUTO_DRIVE_FORWARD, drive_step, 3000, 50, 0.1, a, d, 50, 10000, true);
     con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 10000);
@@ -303,7 +303,7 @@ void auto_blue() {
 
 
 void auto_red() {
-
+  
 }
 
 

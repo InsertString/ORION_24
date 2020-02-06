@@ -34,6 +34,7 @@ using namespace pros;
 #define CUBE_DETECTER 5
 #define GYRO 6
 #define AUTO_POT 7
+#define BARRIAR_LIMIT 4
 
 
 // values
@@ -89,5 +90,7 @@ extern PID tray_pid;
 
 extern int auto_colour;
 extern int auto_running;
+
+extern ADIDigitalIn barriar_limit;
 
 #endif  // _PROS_MAIN_H_

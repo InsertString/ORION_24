@@ -26,6 +26,8 @@ ADILineSensor c_detect(CUBE_DETECTER);
 ADIPotentiometer auto_pot(AUTO_POT);
 ADIGyro gyro(GYRO);
 
+ADIDigitalIn barriar_limit(BARRIAR_LIMIT);
+
 //PID objects
 PID arm_pid;
 PID tray_pid;
@@ -82,7 +84,7 @@ void opcontrol() {
 
 	int arm_timer = 0;
 	int arm_delta_time = 0;
-	int arm_cube_wait = 1000;
+	int arm_cube_wait = 200;
 
 	int tray_state = 0;
 

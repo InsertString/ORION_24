@@ -196,7 +196,7 @@ void auto_turn(int direction, int &step, int raw_target, int start_power, double
 
 
 
-void drive_along_wall(int direction, int &step, int target, int start_power, double precision, const double accel_vars[], const double deccel_vars[], int max_power, int time_limit) {
+void drive_along_wall(int direction, int &step, int target, int start_power, double precision, const double accel_vars[], const double deccel_vars[], int max_power, int time_limit, bool wait_for_barriar) {
   // mamy absolute values are taken in order to account for user error
 
   int half_target = abs(target) / 2;
@@ -218,6 +218,9 @@ void drive_along_wall(int direction, int &step, int target, int start_power, dou
 
   // only run the switch statement if you are not yet at the last step and you are in time
   if (step < AUTO_DRIVE_MAX_STEP && getTime(AUTO_DRIVE_TIMEOUT) <= time_limit) {
+    if (wait_for_barriar == true && barriar_limit.get_value()) {
+      step = AUTO_DRIVE_MAX_STEP;
+    }
     switch (step) {
       case 0 :
       // setup
