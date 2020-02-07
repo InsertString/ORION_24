@@ -12,6 +12,7 @@
 #include "timing.hpp"
 #include "auto_codes.hpp"
 #include "auto_setup.hpp"
+#include "lcd.hpp"
 
 using namespace pros;
 
@@ -92,5 +93,8 @@ extern int auto_colour;
 extern int auto_running;
 
 extern ADIDigitalIn barriar_limit;
+
+extern std::string roller_status;
+extern std::string a_colour;
 
 #endif  // _PROS_MAIN_H_

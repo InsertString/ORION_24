@@ -56,8 +56,6 @@ void auto_loop() {
   startTimer(AUTO_TIMER);
 	startTimer(AUTO_STEP_TIMER);
 
-  std::string roller_status = "EMPTY";
-	std::string a_colour = (auto_pot.get_value() > 2047) ? "BLUE" : "RED";
   auto_colour = (auto_pot.get_value() > 2047) ? BLUE : RED;
 
   reset_values();
@@ -72,18 +70,7 @@ void auto_loop() {
       break;
     }
 
-    if (loaded() == true)
-			roller_status = "LOADED";
-		else
-			roller_status = "EMPTY";
-
-		lcd::print(0, "TrayPos:[%4.0f],ArmPos:[%4.0f]", tray_position(), arm.get_position());
-    lcd::print(1, "Auto Colour : [%s]", a_colour);
-		lcd::print(2, "TEMPS:");
-		lcd::print(3, "DriveL[F][M][B]:[%2.0f][%2.0f][%2.0f]", drive_left_F.get_temperature(), drive_left_B.get_temperature(), drive_abs_left.get_temperature());
-		lcd::print(4, "DriveR[F][M][B]:[%2.0f][%2.0f][%2.0f]", drive_right_F.get_temperature(), drive_right_B.get_temperature(), drive_abs_right.get_temperature());
-		lcd::print(5, "Arm:[%2.0f],Roll_L:[%2.0f],Roll_R:[%2.0f]", arm.get_temperature(), intake_left.get_temperature(), intake_right.get_temperature());
-		lcd::print(6, "Roller:[%s], raw:[%4.0d]", roller_status, c_detect.get_value());
+    lcd_function();
 
 
 		auto_selection();
@@ -362,7 +349,7 @@ void auto_red() {
     auto_arm(arm_step, 0, 0, 0, 0, 0, 0);
     set_a(0, 0, 0, 0);
     set_d(0.2, 0.01, 0.3, 50);
-    auto_drive(AUTO_DRIVE_FORWARD, drive_step, 850, 30, 0.1, a, d, 30, 6000);
+    auto_drive(AUTO_DRIVE_FORWARD, drive_step, 900, 30, 0.1, a, d, 30, 6000);
     con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 6000);
@@ -383,7 +370,7 @@ void auto_red() {
     case 6 :
     set_a(0, 0, 0, 0);
     set_d(0.15, 0.002, 0, 50);
-    auto_turn(AUTO_TURN_R, turn_step, 800, 50, 0.01, a, d, 50, 2000);
+    auto_turn(AUTO_TURN_R, turn_step, 710, 50, 0.01, a, d, 50, 2000);
     con1 = (turn_step == AUTO_TURN_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 2000);
@@ -431,7 +418,7 @@ void auto_red() {
     case 11 :
     set_a(0, 0, 0, 0);
     set_d(0.2, 0.01, 0.3, 50);
-    auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 1800, 70, 0.1, a, d, 70, 10000);
+    auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 1700, 70, 0.1, a, d, 70, 10000);
     con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 10000);
@@ -451,7 +438,7 @@ void auto_red() {
     stop_intake();
     set_a(0, 0, 0, 0);
     set_d(0.2, 0.01, 0.3, 50);
-    auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 900, 70, 0.1, a, d, 70, 10000);
+    auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 1000, 70, 0.1, a, d, 70, 10000);
     con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 10000);
