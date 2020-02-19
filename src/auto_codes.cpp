@@ -164,7 +164,7 @@ void auto_blue() {
     case 6 :
     set_a(0, 0, 0, 0);
     set_d(0.15, 0.002, 0, 50);
-    auto_turn(AUTO_TURN_L, turn_step, 730, 50, 0.01, a, d, 50, 2000);
+    auto_turn(AUTO_TURN_L, turn_step, 680, 50, 0.01, a, d, 50, 2000);
     con1 = (turn_step == AUTO_TURN_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 2000);
@@ -203,7 +203,7 @@ void auto_blue() {
     auto_arm(arm_step, 0, 0, 0, 0, 0, 0);
     set_a(0, 0, 0, 0);
     set_d(0.2, 0.01, 0.3, 50);
-    auto_drive(AUTO_DRIVE_FORWARD, drive_step, 3350, 30, 0.1, a, d, 30, 10000);
+    auto_drive(AUTO_DRIVE_FORWARD, drive_step, 2950, 30, 0.1, a, d, 30, 10000);
     con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 10000);
@@ -212,7 +212,7 @@ void auto_blue() {
     case 11 :
     set_a(0, 0, 0, 0);
     set_d(0.2, 0.01, 0.3, 50);
-    auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 1800, 70, 0.1, a, d, 70, 10000);
+    auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 1500, 70, 0.1, a, d, 70, 10000);
     con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 10000);
@@ -370,7 +370,7 @@ void auto_red() {
     case 6 :
     set_a(0, 0, 0, 0);
     set_d(0.15, 0.002, 0, 50);
-    auto_turn(AUTO_TURN_R, turn_step, 710, 50, 0.01, a, d, 50, 2000);
+    auto_turn(AUTO_TURN_R, turn_step, 750, 50, 0.01, a, d, 50, 2000);
     con1 = (turn_step == AUTO_TURN_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 2000);
@@ -409,7 +409,7 @@ void auto_red() {
     auto_arm(arm_step, 0, 0, 0, 0, 0, 0);
     set_a(0, 0, 0, 0);
     set_d(0.2, 0.01, 0.3, 50);
-    auto_drive(AUTO_DRIVE_FORWARD, drive_step, 3350, 30, 0.1, a, d, 30, 10000);
+    auto_drive(AUTO_DRIVE_FORWARD, drive_step, 2550, 30, 0.1, a, d, 30, 10000);
     con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 10000);
@@ -418,7 +418,7 @@ void auto_red() {
     case 11 :
     set_a(0, 0, 0, 0);
     set_d(0.2, 0.01, 0.3, 50);
-    auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 1700, 70, 0.1, a, d, 70, 10000);
+    auto_drive(AUTO_DRIVE_BACKWARD, drive_step, 1100, 70, 0.1, a, d, 70, 10000);
     con1 = (drive_step == AUTO_DRIVE_MAX_STEP);
     con2 = con3 = true;
     move_steps(con1, con2, con3, auto_step, 10000);
@@ -487,7 +487,7 @@ void auto_red() {
     break;
     case 18 :
     auto_arm(arm_step, 0, 0, 0, 0, 0, 0);
-    score_cubes(935, 100, tray_step, scoring_timer, 0.12);
+    score_cubes(945, 105, tray_step, scoring_timer, 0.12);
     delay(20);
     break;
   }
